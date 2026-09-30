@@ -9,7 +9,6 @@ if dataDir == nil then
   error("Wallpaper Depth requires a plugin data directory")
 end
 local operationPath = dataDir .. "/setup-operation.json"
-local runtimePython = dataDir .. "/runtime/.venv/bin/python"
 
 local setupState = "checking"
 local setupMessage = ""
@@ -166,7 +165,7 @@ runNext = function()
   publish()
 
   local accepted = noctalia.runAsync({
-    runtimePython,
+    "python3",
     helperPath,
     "--data-dir",
     dataDir,

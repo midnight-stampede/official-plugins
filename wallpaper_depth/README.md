@@ -25,6 +25,13 @@ Small ONNX model from Hugging Face. The runtime contains pinned versions of
 NumPy, ONNX Runtime, and Pillow; it does not modify the system Python
 environment.
 
+> [!NOTE]
+> NixOS and Guix systems require you to also install the following python
+> libraries system-wide: `numpy`, `onnxruntime`, and `pillow`. Those will be used 
+> instead of setting up a venv. This is because `onnxruntime` requires FHS
+> compliant systems when installed in the venv, and thus the venv setup validation 
+> will fail on NixOS or Guix.
+
 ## Usage
 Add the **Wallpaper Depth** bar widget to open the plugin settings directly from
 the bar.

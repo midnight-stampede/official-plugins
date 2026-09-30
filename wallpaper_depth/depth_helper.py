@@ -67,7 +67,17 @@ def verify_model(path: Path) -> bool:
     return path.is_file() and path.stat().st_size == MODEL_SIZE and sha256_file(path) == MODEL_SHA256
 
 
+def system_ready() -> bool:
+    try:
+        import numpy, onnxruntime, PIL
+    except Exception:
+        return False
+    return True
+
+
 def runtime_ready(data_dir: Path) -> bool:
+    if system_ready():
+        return True
     python = runtime_python(data_dir)
     if not python.is_file():
         return False
@@ -393,6 +403,10 @@ def parse_args() -> argparse.Namespace:
 def main() -> int:
     args = parse_args()
     data_dir = args.data_dir.expanduser().resolve()
+    venv_python = runtime_python(data_dir)
+    if args.command == "generate" and not system_ready() and venv_python.is_file():
+        if Path(sys.executable) != venv_python:
+            os.execv(venv_python, [str(venv_python), *sys.argv])
     try:
         if args.command == "setup":
             setup(data_dir)
